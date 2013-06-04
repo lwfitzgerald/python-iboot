@@ -133,7 +133,7 @@ class ChangeRelaysCommand(RelayCommand):
 
         self.interface.logger.debug(self.relay_state_dict)
 
-        for relay in xrange(32):
+        for relay in xrange(self.interface.num_relays):
             if (relay + 1) not in self.relay_state_dict:
                 state_list.append(self.STATE_MAP['NO_CHANGE'])
             else:
