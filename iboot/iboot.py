@@ -72,12 +72,12 @@ class DXPCommand(object):
         header = self._build_header()
         payload = self._build_payload()
         request = header + payload
-        self.interface.socket.send(request)
+        self.interface.socket.sendall(request)
         return self._get_response()
 
     def _do_payloadless_request(self):
         request = self._build_header()
-        self.interface.socket.send(request)
+        self.interface.socket.sendall(request)
         return self._get_response()
 
 
@@ -207,7 +207,7 @@ class iBootInterface(object):
             return False
 
         try:
-            self.socket.send(HELLO_STR)
+            self.socket.sendall(HELLO_STR)
             return self._get_initial_seq_num()
         except socket.error:
             self.logger.error('Socket error')
