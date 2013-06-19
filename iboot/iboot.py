@@ -18,6 +18,8 @@ COMMAND_MAP = {
     'RCU': 6
 }
 
+SOCKET_TIMEOUT = 10
+
 
 class DXPCommand(object):
     COMMAND = None
@@ -199,6 +201,7 @@ class iBootInterface(object):
 
     def connect(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.settimeout(SOCKET_TIMEOUT)
 
         try:
             self.socket.connect((self.ip, self.port))
