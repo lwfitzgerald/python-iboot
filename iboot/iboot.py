@@ -244,16 +244,29 @@ class iBootInterface(object):
             self.disconnect()
 
     def switch_multiple(self, relay_state_dict):
-        """Change the state of multiple relays at once"""
-        self.connect()
-        request = ChangeRelaysCommand(self, relay_state_dict)
+        """
+        Change the state of multiple relays at once
 
-        try:
-            return request.do_request()
-        except socket.error:
-            return False
-        finally:
-            self.disconnect()
+        State dictionary should be of the form:
+            {1: True}
+        where the key is the relay and the value is the new state
+        """
+        self.connect()
+
+        for relay, new_state in relay_state_dict.items():
+            request = ChangeRelayCommand(relay, new_state)
+
+            try:
+                result = request.do_request()
+
+                if not result:
+                    return False
+            except socket.error:
+                self.disconnect()
+                return False
+
+        self.disconnect()
+        return True
 
     def get_relays(self):
         self.connect()
