@@ -254,7 +254,7 @@ class iBootInterface(object):
         self.connect()
 
         for relay, new_state in relay_state_dict.items():
-            request = ChangeRelayCommand(relay, new_state)
+            request = ChangeRelayCommand(self, relay, new_state)
 
             try:
                 result = request.do_request()
