@@ -68,7 +68,14 @@ class DXPCommand(object):
     def _parse_bool(self, string):
         return not struct.unpack('?', string)[0]
 
-    def do_payloadless_request(self):
+    def do_request(self):
+        header = self._build_header()
+        payload = self._build_payload()
+        request = header + payload
+        self.interface.socket.send(request)
+        return self._get_response()
+
+    def _do_payloadless_request(self):
         request = self._build_header()
         self.interface.socket.send(request)
         return self._get_response()
@@ -97,13 +104,6 @@ class RelayCommand(IOCommand):
 
     def _get_response(self):
         return self._get_boolean_response()
-
-    def do_request(self):
-        header = self._build_header()
-        payload = self._build_payload()
-        request = header + payload
-        self.interface.socket.send(request)
-        return self._get_response()
 
 
 class ChangeRelayCommand(RelayCommand):
@@ -149,9 +149,7 @@ class GetRelaysRequest(IOCommand):
     DESCRIPTOR = 'GET_RELAYS'
 
     def do_request(self):
-        request = self._build_header()
-        self.interface.socket.send(request)
-        return self._get_response()
+        return self._do_payloadless_request()
 
     def _get_response(self):
         response = self.interface.socket.recv(self.interface.num_relays)
@@ -278,3 +276,4 @@ class iBootInterface(object):
 
 if __name__ == '__main__':
     interface = iBootInterface('192.168.0.105', 'admin', 'admin')
+
