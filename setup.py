@@ -8,7 +8,7 @@ setup(
     description=("Python library to control iBoot."),
     license="BSD",
     keywords="python iboot",
-    url="https://github/darkip/iboot",
+    url="https://github.com/lwfitzgerald/python-iboot",
     packages=['iboot'],
     classifiers=[
         "Development Status :: 4 - Beta",
